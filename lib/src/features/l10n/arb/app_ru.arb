@@ -1,0 +1,7 @@
+{
+    "@@locale": "ru",
+    "appName": "Погода",
+    "@appName": {
+        "description": "Название приложения"
+    }
+}
