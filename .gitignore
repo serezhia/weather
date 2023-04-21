@@ -128,5 +128,5 @@ app.*.map.json
 
 # Generated/Freezed
 
-**.freezed.dart
-**.g.dart
+*.freezed.dart
+*.g.dart
