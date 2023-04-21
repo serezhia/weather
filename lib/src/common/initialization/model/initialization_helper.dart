@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:l/l.dart';
@@ -10,6 +11,7 @@ import 'package:weather/src/common/consts/config_app.dart';
 import 'package:weather/src/common/initialization/model/initialization_progress.dart';
 import 'package:weather/src/common/initialization/model/repository_storage.dart';
 import 'package:weather/src/common/utils/sreen_util.dart';
+import 'package:weather/src/features/weather/data/weather_repository.dart';
 
 class InitializationHelper {
   bool _isInitialized = false;
@@ -94,6 +96,18 @@ final Map<
       deviceLogicalSideMin: screenSize.min,
       deviceLogicalSideMax: screenSize.max,
     );
+
     return store.copyWith(appMetadata: appMetadata);
   },
+  'Creating Dio': (store) async {
+    final dio = Dio();
+    return store.copyWith(dio: dio);
+  },
+  'Creating WeatherRepository': (store) {
+    final weatherRepository = OpenWeatherMapWeatherRepository(
+      store.dio!,
+      openWeatherApiKey,
+    );
+    return store.copyWith(weatherRepository: weatherRepository);
+  }
 };

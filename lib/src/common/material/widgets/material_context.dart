@@ -16,7 +16,6 @@ class AppMaterialContext extends StatefulWidget {
 }
 
 class _AppMaterialContextState extends State<AppMaterialContext> {
-  final router = MainRouter();
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
@@ -32,7 +31,7 @@ class _AppMaterialContextState extends State<AppMaterialContext> {
         Locale('ru'), // Russian
       ],
       debugShowCheckedModeBanner: false,
-      routerConfig: router.goRouter,
+      routerConfig: MainRouter.goRouter,
     );
   }
 }

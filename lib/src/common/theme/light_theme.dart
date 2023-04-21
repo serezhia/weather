@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 final lightTheme = ThemeData(
+  colorScheme: const ColorScheme.light(primary: Colors.black),
   appBarTheme: const AppBarTheme(
     centerTitle: true,
+    iconTheme: IconThemeData(color: Colors.black),
     elevation: 0,
     backgroundColor: Colors.white,
     titleTextStyle: TextStyle(
@@ -12,6 +14,12 @@ final lightTheme = ThemeData(
       color: Colors.black,
     ),
   ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Colors.black,
+    selectionColor: Colors.black.withOpacity(0.2),
+    selectionHandleColor: Colors.black,
+  ),
+  fontFamily: 'Gilroy',
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       elevation: MaterialStateProperty.all(0),
@@ -23,8 +31,13 @@ final lightTheme = ThemeData(
     ),
   ),
   inputDecorationTheme: InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
+    enabledBorder: const OutlineInputBorder(
+      gapPadding: 20,
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(16),
+        bottomRight: Radius.circular(16),
+      ),
+      borderSide: BorderSide(width: 2),
     ),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(
