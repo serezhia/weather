@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart' as concurrency;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:weather/src/features/weather/data/weather_repository.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart' as concurrency;
-
 import 'package:weather/src/features/weather/models/city/city.dart';
+import 'package:weather/src/features/weather/models/exeption/weather_exeption.dart';
 import 'package:weather/src/features/weather/models/weather/weather.dart';
 
 part 'days_weather_bloc.freezed.dart';
@@ -30,6 +30,7 @@ class DaysWeatherState with _$DaysWeatherState {
     required City? city,
     required bool isLoading,
     required bool isRefresh,
+    required int? codeError,
   }) = _DaysWeatherState;
 }
 
@@ -43,32 +44,46 @@ class DaysWeatherBloc extends Bloc<DaysWeatherEvent, DaysWeatherState> {
             city: null,
             isLoading: true,
             isRefresh: false,
+            codeError: null,
           ),
         ) {
     on<_StartedDaysWeatherEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
 
-      /// Получение города
-      final city = await weatherRepository.getCityByCoords(
-        lat: event.lat,
-        lon: event.lon,
-      );
-      emit(
-        state.copyWith(city: city),
-      );
+      try {
+        /// Получение города
+        final city = await weatherRepository.getCityByCoords(
+          lat: event.lat,
+          lon: event.lon,
+        );
+        emit(
+          state.copyWith(city: city),
+        );
 
-      ///Получаем погоду
-      final weathers = await weatherRepository.getWeathers(city: city!);
-      emit(
-        state.copyWith(weathers: weathers),
-      );
+        ///Получаем погоду
+        final weathers = await weatherRepository.getWeathers(city: city);
+        emit(
+          state.copyWith(weathers: weathers),
+        );
 
-      ///Вычисляем самый холодный час
-      final coldWeather =
-          weathers.reduce((curr, next) => curr.temp < next.temp ? curr : next);
-      emit(
-        state.copyWith(coldWeather: coldWeather, isLoading: false),
-      );
+        ///Вычисляем самый холодный час
+        final coldWeather = weathers
+            .reduce((curr, next) => curr.temp < next.temp ? curr : next);
+        emit(
+          state.copyWith(
+            coldWeather: coldWeather,
+            isLoading: false,
+            codeError: null,
+          ),
+        );
+      } on WeatherExeption catch (e) {
+        emit(
+          state.copyWith(
+            codeError: e.code,
+            isLoading: false,
+          ),
+        );
+      }
     });
     on<_RefreshDaysWeatherEvent>(
       (event, emit) async {
@@ -78,21 +93,32 @@ class DaysWeatherBloc extends Bloc<DaysWeatherEvent, DaysWeatherState> {
         emit(state.copyWith(isRefresh: true));
 
         ///Получаем погоду
-        final weathers = await weatherRepository.getWeathers(city: state.city!);
-        emit(
-          state.copyWith(weathers: weathers),
-        );
+        try {
+          final weathers =
+              await weatherRepository.getWeathers(city: state.city!);
+          emit(
+            state.copyWith(weathers: weathers),
+          );
 
-        ///Вычисляем самый холодный час
-        final coldWeather = weathers
-            .reduce((curr, next) => curr.temp < next.temp ? curr : next);
+          ///Вычисляем самый холодный час
+          final coldWeather = weathers
+              .reduce((curr, next) => curr.temp < next.temp ? curr : next);
 
-        emit(
-          state.copyWith(
-            coldWeather: coldWeather,
-            isRefresh: false,
-          ),
-        );
+          emit(
+            state.copyWith(
+              coldWeather: coldWeather,
+              isRefresh: false,
+              codeError: null,
+            ),
+          );
+        } on WeatherExeption catch (e) {
+          emit(
+            state.copyWith(
+              codeError: e.code,
+              isRefresh: false,
+            ),
+          );
+        }
       },
       transformer: concurrency.concurrent(),
     );

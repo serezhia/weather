@@ -3,6 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart' as concurrency;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:weather/src/features/weather/data/weather_repository.dart';
 import 'package:weather/src/features/weather/models/city/city.dart';
+import 'package:weather/src/features/weather/models/exeption/weather_exeption.dart';
 
 part 'choose_city_bloc.freezed.dart';
 
@@ -23,6 +24,7 @@ class ChooseCityBlocState with _$ChooseCityBlocState {
 
     /// Выбранный город
     required City? pickedCity,
+    required int? codeError,
   }) = _ChooseCityBlocState;
 }
 
@@ -33,6 +35,7 @@ class ChooseCityBloc extends Bloc<ChooseCityBlocEvent, ChooseCityBlocState> {
           const ChooseCityBlocState(
             currentSug: [],
             pickedCity: null,
+            codeError: null,
           ),
         ) {
     on<_ChangeSuggChooseCityBlocEvent>(
@@ -41,15 +44,22 @@ class ChooseCityBloc extends Bloc<ChooseCityBlocEvent, ChooseCityBlocState> {
           return;
         }
 
-        final cities =
-            await weatherRepository.getCitiesByName(name: event.name);
+        try {
+          final cities =
+              await weatherRepository.getCitiesByName(name: event.name);
 
-        emit(state.copyWith(currentSug: cities));
+          emit(state.copyWith(currentSug: cities, codeError: null));
+        } on WeatherExeption catch (ex) {
+          emit(state.copyWith(codeError: ex.code));
+        } catch (_) {
+          emit(state.copyWith(codeError: 999));
+        }
       },
 
       /// Отброс предыдущих эвентов чтобы избежать долгого поиска
       transformer: concurrency.concurrent(),
     );
+
     on<_PickCityChooseCityBlocEvent>((event, emit) {
       emit(state.copyWith(pickedCity: event.city));
     });

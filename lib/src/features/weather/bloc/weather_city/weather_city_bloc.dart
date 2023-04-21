@@ -3,6 +3,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart' as concurrency;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:weather/src/features/weather/data/weather_repository.dart';
 import 'package:weather/src/features/weather/models/city/city.dart';
+import 'package:weather/src/features/weather/models/exeption/weather_exeption.dart';
 import 'package:weather/src/features/weather/models/weather/weather.dart';
 
 part 'weather_city_bloc.freezed.dart';
@@ -26,7 +27,7 @@ class WeatherCityState with _$WeatherCityState {
     required List<Weather> weathers,
     required bool isLoading,
     required bool isRefresh,
-    required String? error,
+    required int? codeError,
   }) = _WeatherCityBlocState;
 }
 
@@ -37,35 +38,45 @@ class WeatherCityBloc extends Bloc<WeatherCityEvent, WeatherCityState> {
           const WeatherCityState(
             city: null,
             weathers: [],
-            error: null,
+            codeError: null,
             isLoading: true,
             isRefresh: false,
           ),
         ) {
     on<_InitWeatherCityEvent>(
       (event, emit) async {
-        emit(state.copyWith(isLoading: true));
+        emit(state.copyWith(isLoading: true, codeError: null));
 
         /// Получение города
-        final city = await weatherRepository.getCityByCoords(
-          lat: event.lat,
-          lon: event.lon,
-        );
-        emit(
-          state.copyWith(
-            city: city,
-          ),
-        );
+        try {
+          final city = await weatherRepository.getCityByCoords(
+            lat: event.lat,
+            lon: event.lon,
+          );
+          emit(
+            state.copyWith(
+              city: city,
+            ),
+          );
 
-        /// Получение погоды
+          /// Получение погоды
 
-        final weathers = await weatherRepository.getWeathers(city: city!);
-        emit(
-          state.copyWith(
-            weathers: weathers,
-            isLoading: false,
-          ),
-        );
+          final weathers = await weatherRepository.getWeathers(city: city);
+          emit(
+            state.copyWith(
+              weathers: weathers,
+              isLoading: false,
+              codeError: null,
+            ),
+          );
+        } on WeatherExeption catch (e) {
+          emit(
+            state.copyWith(
+              codeError: e.code,
+              isLoading: false,
+            ),
+          );
+        }
       },
       transformer: concurrency.concurrent(),
     );
@@ -75,16 +86,26 @@ class WeatherCityBloc extends Bloc<WeatherCityEvent, WeatherCityState> {
           return;
         }
         emit(state.copyWith(isRefresh: true));
+        try {
+          /// Получение погоды
+          final weathers =
+              await weatherRepository.getWeathers(city: state.city!);
 
-        /// Получение погоды
-        final weathers = await weatherRepository.getWeathers(city: state.city!);
-
-        emit(
-          state.copyWith(
-            weathers: weathers,
-            isRefresh: false,
-          ),
-        );
+          emit(
+            state.copyWith(
+              weathers: weathers,
+              isRefresh: false,
+              codeError: null,
+            ),
+          );
+        } on WeatherExeption catch (e) {
+          emit(
+            state.copyWith(
+              codeError: e.code,
+              isRefresh: false,
+            ),
+          );
+        }
       },
 
       /// Чтобы при повторном рефреше дропись все остальные евенты

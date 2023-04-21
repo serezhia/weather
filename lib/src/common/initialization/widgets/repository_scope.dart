@@ -50,6 +50,7 @@ class _InheritedRepositoryScope extends InheritedWidget {
   bool updateShouldNotify(_InheritedRepositoryScope oldWidget) => false;
 }
 
+/// context.repoStorage
 extension RepositoryScopeX on BuildContext {
   RepositoryStorage get repoStorage => RepositoryScope.of(this);
 }

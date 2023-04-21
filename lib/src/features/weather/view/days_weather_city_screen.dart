@@ -10,6 +10,7 @@ import 'package:weather/src/features/l10n/l10n.dart';
 import 'package:weather/src/features/weather/bloc/three_days_weather_city/bloc/days_weather_bloc.dart';
 
 import 'package:weather/src/features/weather/models/weather/weather.dart';
+import 'package:weather/src/features/weather/view/widgets/error_widget.dart';
 import 'package:weather/src/features/weather/view/widgets/weather_icon_widget.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -27,11 +28,11 @@ class DaysWeatherScreen extends StatefulWidget {
 }
 
 class _DaysWeatherScreenState extends State<DaysWeatherScreen> {
-  late final DaysWeatherBloc _threeDaysWeatherBloc;
+  late final DaysWeatherBloc bloc;
 
   @override
   void initState() {
-    _threeDaysWeatherBloc = DaysWeatherBloc(
+    bloc = DaysWeatherBloc(
       RepositoryScope.of(context).weatherRepository,
     )..add(
         DaysWeatherEvent.started(
@@ -59,7 +60,7 @@ class _DaysWeatherScreenState extends State<DaysWeatherScreen> {
           },
         ),
         title: BlocBuilder<DaysWeatherBloc, DaysWeatherState>(
-          bloc: _threeDaysWeatherBloc,
+          bloc: bloc,
           builder: (context, state) {
             if (state.city == null) {
               return Text(context.l10n.appName);
@@ -79,18 +80,29 @@ class _DaysWeatherScreenState extends State<DaysWeatherScreen> {
         ),
       ),
       body: BlocProvider.value(
-        value: _threeDaysWeatherBloc,
+        value: bloc,
         child: BlocBuilder<DaysWeatherBloc, DaysWeatherState>(
-          bloc: _threeDaysWeatherBloc,
+          bloc: bloc,
           builder: (context, state) {
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());
+            } else if (state.codeError != null) {
+              return ErrorWeatherWidget(
+                code: state.codeError!,
+                onPressed: () {
+                  bloc.add(
+                    DaysWeatherEvent.started(
+                      lat: widget.lat,
+                      lon: widget.lon,
+                    ),
+                  );
+                },
+              );
             } else {
               return RefreshIndicator(
                 onRefresh: () async {
-                  _threeDaysWeatherBloc.add(const DaysWeatherEvent.refresh());
-                  await _threeDaysWeatherBloc.stream
-                      .firstWhere((state) => !state.isRefresh);
+                  bloc.add(const DaysWeatherEvent.refresh());
+                  await bloc.stream.firstWhere((state) => !state.isRefresh);
                   return;
                 },
                 child: ListView.builder(

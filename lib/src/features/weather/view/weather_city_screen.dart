@@ -7,6 +7,7 @@ import 'package:weather/src/common/router/router.dart';
 import 'package:weather/src/features/l10n/l10n.dart';
 import 'package:weather/src/features/weather/bloc/weather_city/weather_city_bloc.dart';
 import 'package:weather/src/features/weather/models/weather/weather.dart';
+import 'package:weather/src/features/weather/view/widgets/error_widget.dart';
 import 'package:weather/src/features/weather/view/widgets/weather_icon_widget.dart';
 import 'package:weather_icons/weather_icons.dart';
 
@@ -83,6 +84,18 @@ class _WeatherCityScreenState extends State<WeatherCityScreen> {
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());
+          } else if (state.codeError != null) {
+            return ErrorWeatherWidget(
+              code: state.codeError!,
+              onPressed: () {
+                weatherCityBloc.add(
+                  WeatherCityEvent.init(
+                    lat: widget.lat,
+                    lon: widget.lon,
+                  ),
+                );
+              },
+            );
           } else {
             return RefreshIndicator(
               onRefresh: () async {

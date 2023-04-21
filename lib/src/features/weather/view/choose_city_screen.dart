@@ -6,6 +6,7 @@ import 'package:weather/src/common/initialization/widgets/repository_scope.dart'
 import 'package:weather/src/features/l10n/l10n.dart';
 import 'package:weather/src/features/weather/bloc/choose_city/choose_city_bloc.dart';
 import 'package:weather/src/features/weather/models/city/city.dart';
+import 'package:weather/src/features/weather/view/widgets/error_widget.dart';
 
 class ChooseCityScreen extends StatefulWidget {
   const ChooseCityScreen({super.key});
@@ -21,7 +22,7 @@ class _ChooseCityScreenState extends State<ChooseCityScreen> {
 
   @override
   void initState() {
-    bloc = ChooseCityBloc(RepositoryScope.of(context).weatherRepository);
+    bloc = ChooseCityBloc(context.repoStorage.weatherRepository);
 
     super.initState();
   }
@@ -37,104 +38,132 @@ class _ChooseCityScreenState extends State<ChooseCityScreen> {
         maintainBottomViewPadding: true,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: BlocProvider.value(
-            value: bloc,
-            child: BlocBuilder<ChooseCityBloc, ChooseCityBlocState>(
-              bloc: bloc,
-              builder: (context, state) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 20),
-                          const Text(
-                            'Укажи город',
-                            style: TextStyle(
-                              fontSize: 50,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Expanded(
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  width: 2,
-                                  strokeAlign: BorderSide.strokeAlignOutside,
-                                ),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(16),
+          child: Builder(
+            builder: (context) {
+              return BlocProvider.value(
+                value: bloc,
+                child: BlocConsumer<ChooseCityBloc, ChooseCityBlocState>(
+                  listener: (context, state) {
+                    if (state.codeError != null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.codeError.toString())),
+                      );
+                    }
+                  },
+                  bloc: bloc,
+                  builder: (context, state) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 20),
+                              const Text(
+                                'Укажи город',
+                                style: TextStyle(
+                                  fontSize: 50,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              child: Column(
-                                children: [
-                                  TextFormField(
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
+                              const SizedBox(height: 20),
+                              Expanded(
+                                child: DecoratedBox(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      width: 2,
+                                      strokeAlign:
+                                          BorderSide.strokeAlignOutside,
                                     ),
-                                    autofocus: true,
-                                    decoration: const InputDecoration(
-                                      contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 10),
-                                      enabledBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 2,
-                                        ),
-                                      ),
-                                      focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                          width: 2,
-                                        ),
-                                      ),
-                                    ),
-                                    controller: textController,
-                                    onChanged: (value) {
-                                      bloc.add(
-                                        ChooseCityBlocEvent.changeSugg(value),
-                                      );
-                                    },
-                                  ),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      itemCount: state.currentSug.length,
-                                      itemBuilder: (context, index) =>
-                                          CityItemWidget(
-                                        city: state.currentSug[index],
-                                        isPicked: state.pickedCity ==
-                                            state.currentSug[index],
-                                      ),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(16),
                                     ),
                                   ),
-                                ],
+                                  child: Column(
+                                    children: [
+                                      TextFormField(
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        autofocus: true,
+                                        decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                          ),
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              width: 2,
+                                            ),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
+                                        controller: textController,
+                                        onChanged: (value) {
+                                          bloc.add(
+                                            ChooseCityBlocEvent.changeSugg(
+                                              value,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                      Expanded(
+                                        child: state.codeError != null
+                                            ? ErrorWeatherWidget(
+                                                code: state.codeError!,
+                                                onPressed: () {
+                                                  bloc.add(
+                                                    ChooseCityBlocEvent
+                                                        .changeSugg(
+                                                      textController.text,
+                                                    ),
+                                                  );
+                                                },
+                                              )
+                                            : ListView.builder(
+                                                itemCount:
+                                                    state.currentSug.length,
+                                                itemBuilder: (context, index) =>
+                                                    CityItemWidget(
+                                                  city: state.currentSug[index],
+                                                  isPicked: state.pickedCity ==
+                                                      state.currentSug[index],
+                                                ),
+                                              ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      height: 50,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: state.pickedCity == null
-                            ? null
-                            : () {
-                                context.go(
-                                  '/weather?lat=${state.pickedCity!.lat}&lon=${state.pickedCity!.lon}',
-                                );
-                              },
-                        child: const Text('Далее'),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                );
-              },
-            ),
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          height: 50,
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: state.pickedCity == null
+                                ? null
+                                : () {
+                                    context.go(
+                                      '/weather?lat=${state.pickedCity!.lat}&lon=${state.pickedCity!.lon}',
+                                    );
+                                  },
+                            child: const Text('Далее'),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    );
+                  },
+                ),
+              );
+            },
           ),
         ),
       ),
