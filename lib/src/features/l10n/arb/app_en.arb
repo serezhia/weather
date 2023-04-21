@@ -3,5 +3,48 @@
     "appName": "Weather",
     "@appName": {
         "description": "App name"
-    }
+    },
+
+
+    "chooseCityTitle": "Choose city",
+    "@chooseCityTitle": {
+        "description": "Text first screen"
+    },
+    "readyButton": "Ready",
+    "@readyButton": {
+        "description": "Text on ready button"
+    },
+
+
+    "coldestHourTitle": "Coldest hour in",
+    "@coldestHourTitle": {
+        "description": "Text on third screen"
+    },
+
+    "metersAndSeconds": "m/s",
+    "@metersAndSeconds": {
+        "description": "Subtitle for wind speed"
+    },
+    
+    "byHourWeatherTitle": "By hour",
+    "@byHourWeatherTitle": {
+        "description": "By hour"
+    },
+
+
+
+    "error0": "No internet conncetion",
+    "@error0": {
+        "description": "Error message"
+    },
+    "error4001": "City not found",
+  
+    "error4002": "Weather not found",
+  
+    "error999": "Unknown error",
+  
+    "error9999": "Unknown internet error",
+   
+    "errorUnimplemented": "Unknown error"
+
 }

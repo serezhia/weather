@@ -3,5 +3,44 @@
     "appName": "Погода",
     "@appName": {
         "description": "Название приложения"
-    }
+    },
+
+    "chooseCityTitle": "Выбери город",
+    "@chooseCityTitle": {
+        "description": "Текст на первом экране"
+    },
+    "readyButton": "Готово !",
+    "@readyButton": {
+        "description": "Текст на кнопочке далее"
+    },
+
+
+    "coldestHourTitle": "Самый холодный час в",
+    "@coldestHourTitle": {
+        "description": "Заголовок на третьем экране"
+    },
+
+    "metersAndSeconds": "м/с",
+    "@metersAndSeconds": {
+        "description": "Подпись к скорости ветра"
+    },
+    
+    "byHourWeatherTitle": "По часу",
+    "@byHourWeatherTitle": {
+        "description": "По часу"
+    },
+
+    "error0": "Отсуствует интернет соединение",
+    "@error0": {
+        "description": "Сообщение при ошибке"
+    },
+    "error4001": "Город не найден",
+  
+    "error4002": "Погода не найдена",
+  
+    "error999": "Неизвестная ошибка",
+  
+    "error9999": "Неизвестная интернет ошибка",
+   
+    "errorUnimplemented": "Неизвестная необработанная ошибка"
 }

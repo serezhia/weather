@@ -115,7 +115,7 @@ class _DaysWeatherScreenState extends State<DaysWeatherScreen> {
                         return _WeatherDaysItem(
                           weather: state.coldWeather!,
                           title:
-                              'Самый холодный час в ${DateFormat.MMMEd(context.l10n.localeName).format(state.coldWeather!.date)}',
+                              '${context.l10n.coldestHourTitle} ${DateFormat.MMMEd(context.l10n.localeName).format(state.coldWeather!.date)}',
                         );
                       } else if (index == 1 ||
                           (state.weathers[index - 2].date.day !=
@@ -245,7 +245,7 @@ class _WeatherDaysItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${weather.windSpeed.floor()} м/с',
+                        '${weather.windSpeed.floor()} ${context.l10n.metersAndSeconds}',
                         style: const TextStyle(
                           fontSize: 20,
                         ),

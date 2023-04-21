@@ -60,9 +60,9 @@ class _ChooseCityScreenState extends State<ChooseCityScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 20),
-                              const Text(
-                                'Укажи город',
-                                style: TextStyle(
+                              Text(
+                                context.l10n.chooseCityTitle,
+                                style: const TextStyle(
                                   fontSize: 50,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -154,7 +154,7 @@ class _ChooseCityScreenState extends State<ChooseCityScreen> {
                                       '/weather?lat=${state.pickedCity!.lat}&lon=${state.pickedCity!.lon}',
                                     );
                                   },
-                            child: const Text('Далее'),
+                            child: Text(context.l10n.readyButton),
                           ),
                         ),
                         const SizedBox(height: 20),

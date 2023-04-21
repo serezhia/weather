@@ -173,7 +173,7 @@ class _WeatherCityScreenState extends State<WeatherCityScreen> {
                               ),
                             ),
                             Text(
-                              '${state.weathers.first.windSpeed.floor()} м/c',
+                              '''${state.weathers.first.windSpeed.floor()} ${context.l10n.metersAndSeconds}''',
                               style: const TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.w700,
@@ -184,10 +184,10 @@ class _WeatherCityScreenState extends State<WeatherCityScreen> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    const SizedBox(
+                    SizedBox(
                       child: Text(
-                        'По часам',
-                        style: TextStyle(
+                        context.l10n.byHourWeatherTitle,
+                        style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w700,
                         ),
