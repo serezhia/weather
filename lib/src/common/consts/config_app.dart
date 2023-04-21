@@ -1,8 +1,8 @@
 /// Ссылка на сервер Sentry
 const sentryDNS = '';
 
-/// Версия приложения (используется для Sentry)
-const appVersion = '0.0.0';
+/// Версия приложения (используется для Sentry или миграции (ее тут нет))
+const appVersion = '1.1.0';
 
 /// API ключ от OpenWeatherMap
 const openWeatherApiKey = String.fromEnvironment(

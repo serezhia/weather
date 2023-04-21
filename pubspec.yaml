@@ -1,6 +1,6 @@
 name: weather
 description: Weather test app for Friflex
-version: 1.0.0+1
+version: 1.1.0
 publish_to: none
 
 environment:
@@ -31,6 +31,7 @@ dependencies:
 dev_dependencies:
   bloc_test: ^9.1.1
   build_runner: ^2.3.3
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
   freezed: ^2.3.2
@@ -57,3 +58,18 @@ flutter:
         - asset: fonts/Gilroy-MediumItalic.ttf
           style: italic
           weight: 500
+
+flutter_launcher_icons:
+  image_path: "assets/images/icon-1024x1024.png"
+  android: true # can specify file name here e.g. "ic_launcher"
+  ios: true # can specify file name here e.g. "My-Launcher-Icon"
+  min_sdk_android: 16 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/icon-1024x1024.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
+  windows:
+    generate: true
+    image_path: "assets/images/icon-1024x1024.png"
+    icon_size: 48 # min:48, max:256, default: 48
