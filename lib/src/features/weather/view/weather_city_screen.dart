@@ -55,7 +55,15 @@ class _WeatherCityScreenState extends State<WeatherCityScreen> {
             if (state.city == null) {
               return Text(context.l10n.appName);
             } else {
-              return Text(state.city!.name);
+              late final String name;
+              if (state.city?.localNames?[context.l10n.localeName] is String) {
+                name =
+                    // ignore: cast_nullable_to_non_nullable
+                    state.city?.localNames?[context.l10n.localeName] as String;
+              } else {
+                name = state.city!.name;
+              }
+              return Text(name);
             }
           },
         ),
@@ -152,7 +160,7 @@ class _WeatherCityScreenState extends State<WeatherCityScreen> {
                               ),
                             ),
                             Text(
-                              '${state.weathers.first.windSpeed} м/c',
+                              '${state.weathers.first.windSpeed.floor()} м/c',
                               style: const TextStyle(
                                 fontSize: 30,
                                 fontWeight: FontWeight.w700,

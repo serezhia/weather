@@ -3,23 +3,17 @@ import 'package:weather/src/features/weather/models/city/city.dart';
 import 'package:weather/src/features/weather/models/weather/weather.dart';
 
 abstract class IWeatherRepository {
-  Future<List<City>> getCitysByName({required String name});
+  /// Получение городов по имени
+  Future<List<City>> getCitiesByName({required String name});
 
+  /// Получние города по координатам
   Future<City?> getCityByCoords({
     required double lat,
     required double lon,
   });
 
-  Future<List<Weather>> getWeathersByDay({
-    required City city,
-    required DateTime date,
-  });
-
-  Future<List<Weather>> getWeathersByThreeDay({
-    required City city,
-  });
-
-  Future<Weather> getCurrentWeather({
+  /// Получение погоды по городу
+  Future<List<Weather>> getWeathers({
     required City city,
   });
 }
@@ -28,6 +22,8 @@ class OpenWeatherMapWeatherRepository implements IWeatherRepository {
   const OpenWeatherMapWeatherRepository(this.dio, this.appId);
 
   final Dio dio;
+
+  /// Api key
   final String appId;
   @override
   Future<City?> getCityByCoords({
@@ -48,7 +44,7 @@ class OpenWeatherMapWeatherRepository implements IWeatherRepository {
   }
 
   @override
-  Future<List<City>> getCitysByName({required String name}) async {
+  Future<List<City>> getCitiesByName({required String name}) async {
     final response = await dio.get<List<dynamic>>(
       'https://api.openweathermap.org/geo/1.0/direct?q=$name&limit=10&appid=$appId',
     );
@@ -65,20 +61,7 @@ class OpenWeatherMapWeatherRepository implements IWeatherRepository {
   }
 
   @override
-  Future<Weather> getCurrentWeather({required City city}) {
-    // TODO: implement getCurrentWeather
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Weather>> getWeathersByDay(
-      {required City city, required DateTime date}) {
-    // TODO: implement getWeathersByDay
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<Weather>> getWeathersByThreeDay({required City city}) async {
+  Future<List<Weather>> getWeathers({required City city}) async {
     final response = await dio.get<dynamic>(
       'https://api.openweathermap.org/data/2.5/forecast?lat=${city.lat}&lon=${city.lon}&units=metric&appid=$appId',
     );
@@ -87,6 +70,7 @@ class OpenWeatherMapWeatherRepository implements IWeatherRepository {
       return [];
     } else {
       final weathers = <Weather>[];
+      // ignore: avoid_dynamic_calls
       for (final el in response.data!['list'] as List<dynamic>) {
         weathers.add(
           Weather.fromOpenWeatherMapJson(el as Map<String, Object?>),

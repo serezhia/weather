@@ -20,14 +20,20 @@ class DaysWeatherEvent with _$DaysWeatherEvent {
 @freezed
 class DaysWeatherState with _$DaysWeatherState {
   const factory DaysWeatherState({
+    /// Самая холодный час за 5 дней
     required Weather? coldWeather,
+
+    /// Все часы
     required List<Weather> weathers,
+
+    /// Текущий город
     required City? city,
     required bool isLoading,
     required bool isRefresh,
   }) = _DaysWeatherState;
 }
 
+/// Блок отвечающий за загрузку погоды и вычисления самого холодного дня
 class DaysWeatherBloc extends Bloc<DaysWeatherEvent, DaysWeatherState> {
   DaysWeatherBloc(this.weatherRepository)
       : super(
@@ -52,8 +58,7 @@ class DaysWeatherBloc extends Bloc<DaysWeatherEvent, DaysWeatherState> {
       );
 
       ///Получаем погоду
-      final weathers =
-          await weatherRepository.getWeathersByThreeDay(city: city!);
+      final weathers = await weatherRepository.getWeathers(city: city!);
       emit(
         state.copyWith(weathers: weathers),
       );
@@ -67,11 +72,13 @@ class DaysWeatherBloc extends Bloc<DaysWeatherEvent, DaysWeatherState> {
     });
     on<_RefreshDaysWeatherEvent>(
       (event, emit) async {
+        if (state.isLoading) {
+          return;
+        }
         emit(state.copyWith(isRefresh: true));
 
         ///Получаем погоду
-        final weathers =
-            await weatherRepository.getWeathersByThreeDay(city: state.city!);
+        final weathers = await weatherRepository.getWeathers(city: state.city!);
         emit(
           state.copyWith(weathers: weathers),
         );
@@ -83,7 +90,6 @@ class DaysWeatherBloc extends Bloc<DaysWeatherEvent, DaysWeatherState> {
         emit(
           state.copyWith(
             coldWeather: coldWeather,
-            isLoading: false,
             isRefresh: false,
           ),
         );

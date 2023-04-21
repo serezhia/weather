@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:l/l.dart';
 
+/// Для логирвоания (ошибки, изменения) всех блоков ниже по дереву
 class AppBlocObserver extends BlocObserver {
   const AppBlocObserver();
 

@@ -8,9 +8,9 @@ part 'choose_city_bloc.freezed.dart';
 
 @freezed
 class ChooseCityBlocEvent with _$ChooseCityBlocEvent {
-  const factory ChooseCityBlocEvent.init() = _InitChooseCityBlocEvent;
   const factory ChooseCityBlocEvent.changeSugg(String name) =
       _ChangeSuggChooseCityBlocEvent;
+
   const factory ChooseCityBlocEvent.pickCity(City city) =
       _PickCityChooseCityBlocEvent;
 }
@@ -18,11 +18,15 @@ class ChooseCityBlocEvent with _$ChooseCityBlocEvent {
 @freezed
 class ChooseCityBlocState with _$ChooseCityBlocState {
   const factory ChooseCityBlocState({
+    /// Города при текущем поиске
     required List<City> currentSug,
+
+    /// Выбранный город
     required City? pickedCity,
   }) = _ChooseCityBlocState;
 }
 
+/// Блок отвечающий за поиск и выбор города
 class ChooseCityBloc extends Bloc<ChooseCityBlocEvent, ChooseCityBlocState> {
   ChooseCityBloc(this.weatherRepository)
       : super(
@@ -37,15 +41,19 @@ class ChooseCityBloc extends Bloc<ChooseCityBlocEvent, ChooseCityBlocState> {
           return;
         }
 
-        final cities = await weatherRepository.getCitysByName(name: event.name);
+        final cities =
+            await weatherRepository.getCitiesByName(name: event.name);
 
         emit(state.copyWith(currentSug: cities));
       },
+
+      /// Отброс предыдущих эвентов чтобы избежать долгого поиска
       transformer: concurrency.concurrent(),
     );
     on<_PickCityChooseCityBlocEvent>((event, emit) {
       emit(state.copyWith(pickedCity: event.city));
     });
   }
+
   final IWeatherRepository weatherRepository;
 }

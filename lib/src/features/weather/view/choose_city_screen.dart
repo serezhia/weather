@@ -72,6 +72,9 @@ class _ChooseCityScreenState extends State<ChooseCityScreen> {
                               child: Column(
                                 children: [
                                   TextFormField(
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                     autofocus: true,
                                     decoration: const InputDecoration(
                                       contentPadding:
@@ -151,17 +154,27 @@ class CityItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late final String name;
+
+    if (city.localNames?[context.l10n.localeName] is String) {
+      // ignore: cast_nullable_to_non_nullable
+      name = city.localNames?[context.l10n.localeName] as String;
+    } else {
+      name = city.name;
+    }
     return GestureDetector(
       onTap: () => context
           .read<ChooseCityBloc>()
           .add(ChooseCityBlocEvent.pickCity(city)),
       child: Container(
-        color: isPicked ? Colors.black.withOpacity(0.2) : null,
-        height: 40,
-        margin: const EdgeInsets.all(8),
-        child: Center(
+        color: isPicked ? Colors.black.withOpacity(0.1) : null,
+        height: 45,
+        padding: const EdgeInsets.all(8),
+        child: Align(
+          alignment: Alignment.centerLeft,
           child: Text(
-            '''${city.country} ${city.name} ${city.state ?? ''} ${city.localNames?[context.l10n.localeName] ?? ''}''',
+            '''${city.country}, ${city.state}, $name''',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
           ),
         ),
       ),

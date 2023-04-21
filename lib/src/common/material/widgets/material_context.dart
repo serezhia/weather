@@ -5,6 +5,7 @@ import 'package:weather/src/common/router/router.dart';
 import 'package:weather/src/common/theme/light_theme.dart';
 import 'package:weather/src/features/l10n/l10n.dart';
 
+/// Виджет содержащий в себе роут, локализацию и тему
 @immutable
 class AppMaterialContext extends StatefulWidget {
   const AppMaterialContext({

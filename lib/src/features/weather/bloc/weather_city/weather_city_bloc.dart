@@ -19,7 +19,10 @@ class WeatherCityEvent with _$WeatherCityEvent {
 @freezed
 class WeatherCityState with _$WeatherCityState {
   const factory WeatherCityState({
+    /// Текущий город
     required City? city,
+
+    /// Текущие часы погоды
     required List<Weather> weathers,
     required bool isLoading,
     required bool isRefresh,
@@ -55,10 +58,8 @@ class WeatherCityBloc extends Bloc<WeatherCityEvent, WeatherCityState> {
         );
 
         /// Получение погоды
-        ///
 
-        final weathers =
-            await weatherRepository.getWeathersByThreeDay(city: city!);
+        final weathers = await weatherRepository.getWeathers(city: city!);
         emit(
           state.copyWith(
             weathers: weathers,
@@ -70,11 +71,13 @@ class WeatherCityBloc extends Bloc<WeatherCityEvent, WeatherCityState> {
     );
     on<_RefreshWeatherCityEvent>(
       (event, emit) async {
+        if (state.isLoading) {
+          return;
+        }
         emit(state.copyWith(isRefresh: true));
 
         /// Получение погоды
-        final weathers =
-            await weatherRepository.getWeathersByThreeDay(city: state.city!);
+        final weathers = await weatherRepository.getWeathers(city: state.city!);
 
         emit(
           state.copyWith(
@@ -83,6 +86,8 @@ class WeatherCityBloc extends Bloc<WeatherCityEvent, WeatherCityState> {
           ),
         );
       },
+
+      /// Чтобы при повторном рефреше дропись все остальные евенты
       transformer: concurrency.concurrent(),
     );
   }

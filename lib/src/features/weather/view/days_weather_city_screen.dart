@@ -64,7 +64,16 @@ class _DaysWeatherScreenState extends State<DaysWeatherScreen> {
             if (state.city == null) {
               return Text(context.l10n.appName);
             } else {
-              return Text(state.city!.name);
+              late final String name;
+
+              if (state.city?.localNames?[context.l10n.localeName] is String) {
+                name =
+                    // ignore: cast_nullable_to_non_nullable
+                    state.city?.localNames?[context.l10n.localeName] as String;
+              } else {
+                name = state.city!.name;
+              }
+              return Text(name);
             }
           },
         ),

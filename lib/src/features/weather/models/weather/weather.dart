@@ -9,17 +9,30 @@ part 'weather.g.dart';
 class Weather with _$Weather {
   factory Weather({
     required DateTime date,
+
+    /// Тип погоды (дождь, солнце)
     required WeatherType type,
+
+    /// Точное описание
     required String description,
+
+    /// Температура
     required double temp,
+
+    /// По ощущениям
     @JsonKey(name: 'feels_like_temp') required double feelsLikeTemp,
+
+    /// Скорость ветра
     @JsonKey(name: 'wind_speed') required double windSpeed,
+
+    /// Влажность
     required int humidity,
   }) = _Weather;
 
   factory Weather.fromJson(Map<String, dynamic> json) =>
       _$WeatherFromJson(json);
 
+  /// Метод перевода из OpenWeatherMap в объект
   factory Weather.fromOpenWeatherMapJson(Map<String, dynamic> apiJson) {
     final newJson = <String, dynamic>{};
 
@@ -41,12 +54,26 @@ class Weather with _$Weather {
   }
 }
 
+/// Типы погодных явлений
 enum WeatherType {
+  /// Шторм
   thunderstorm,
+
+  /// Моросит
   drizzle,
+
+  /// Дождь
   rain,
+
+  /// Снег
   snow,
+
+  /// Всякое другое
   atmosphere,
+
+  /// Безоблачно
   clear,
+
+  ///Облачно
   clouds,
 }

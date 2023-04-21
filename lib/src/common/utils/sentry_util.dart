@@ -6,9 +6,8 @@ import 'package:stack_trace/stack_trace.dart';
 import 'package:weather/src/common/consts/config_app.dart';
 import 'package:weather/src/common/utils/log_util.dart';
 
-// ignore: avoid_classes_with_only_static_members
 abstract class SentryUtil {
-  /// Catching all top level errors here
+  /// Прослойка для логирования крашей и ошибок во всем приложении
   static void wrap(AppRunner appRunner) => runZonedGuarded<Future<void>>(
         () async {
           await SentryFlutter.init(
@@ -41,7 +40,7 @@ abstract class SentryUtil {
         },
       );
 
-  /// Logs to Sentry
+  /// Настройка всех уровней
   static void _loggerToSentryBreadcrumb() => l.listen(
         (msg) {
           final add = msg.level.maybeWhen<bool>(

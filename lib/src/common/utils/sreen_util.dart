@@ -1,9 +1,8 @@
-// ignore_for_file: public_member_api_docs
-
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+/// Утилита для получения размеров экрана и форм фактора
 abstract class ScreenUtil {
   ScreenUtil._();
 
@@ -23,16 +22,6 @@ abstract class ScreenUtil {
     return _screenSizeFromSize(size);
   }
 
-  /// Get current screen logical size representation
-  ///
-  /// extra small - ~320..599 dp, 4 column (phone)
-  /// small - 600..1023 dp, 8 column (tablet)
-  /// medium - 1024..1439 dp, 12 column (large tablet)
-  /// large - 1440..1919 dp, 12 column
-  /// extra large - 1920+ dp, 12 column
-  ///
-  /// [Breakpoints](https://material.io/design/layout/responsive-layout-grid.html#breakpoints)
-  ///
   static ScreenSize screenSizeOf(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return _screenSizeFromSize(size);
@@ -86,7 +75,6 @@ class ScreenSize {
   @override
   String toString() => '<ScreenSize $representation $min..$max>';
 
-  // ignore: long-parameter-list
   ScreenSizeWhenResult when<ScreenSizeWhenResult extends Object?>({
     required ScreenSizeWhenResult Function() extraSmall,
     required ScreenSizeWhenResult Function() small,
@@ -109,13 +97,6 @@ class ScreenSize {
     }
   }
 
-  /// The [maybeWhen] method is equivalent to [when],
-  /// but doesn't require all callbacks to be specified.
-  ///
-  /// On the other hand, it adds an extra [orElse] required parameter,
-  /// for fallback behavior.
-  ///
-  //ignore: long-parameter-list
   ScreenSizeWhenResult maybeWhen<ScreenSizeWhenResult extends Object?>({
     required ScreenSizeWhenResult Function() orElse,
     ScreenSizeWhenResult Function()? extraSmall,

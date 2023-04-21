@@ -57,6 +57,7 @@ class InitializationHelper {
   }
 }
 
+/// Содержит ининицаилазцию объектов/репозиториев
 class InitializationProgressStatus {
   const InitializationProgressStatus({
     required this.progress,

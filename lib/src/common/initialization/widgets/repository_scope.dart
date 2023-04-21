@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:weather/src/common/initialization/model/repository_storage.dart';
 
+/// Виджет для прокладывания всех репозиториев вниз по дереву
 @immutable
 class RepositoryScope extends StatelessWidget {
   const RepositoryScope({
@@ -25,7 +26,7 @@ class RepositoryScope extends StatelessWidget {
   }
 
   static Never _throwNotInitializedYet() =>
-      throw UnsupportedError('The application has not been initialized yet');
+      throw UnsupportedError('The application has not been initialized');
 
   @override
   Widget build(BuildContext context) => _InheritedRepositoryScope(

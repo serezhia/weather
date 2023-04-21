@@ -47,6 +47,7 @@ class InitializationState with _$InitializationState {
   bool get isNotInitialized => !isInitialized;
 }
 
+/// Блок отвечающий за иницализацию всех нужных репозиториев/данных
 class InitializationBLoC
     extends Bloc<InitializationEvent, InitializationState> {
   InitializationBLoC({
@@ -76,6 +77,8 @@ class InitializationBLoC
       }
       _initializationHelper.reset();
 
+      /// Проход по всей мапе, инициализирвоание всех объектов
+      /// и логирование каждого шага
       await _initializationHelper
           .initialize()
           .map<InitializationState>(

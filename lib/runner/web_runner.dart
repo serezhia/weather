@@ -9,6 +9,7 @@ Future<void> runApp() {
   setUrlStrategy(PathUrlStrategy());
 
   return App.initializeAndRun(
+    /// Удаление иконки загруки
     onSuccessfulInitialization: (_) {
       html.document
           .getElementsByClassName('loading')

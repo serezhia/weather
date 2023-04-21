@@ -1,6 +1,8 @@
 import 'package:l/l.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+/// Утилита для удобного логирования ошибок и других сообщений с последующей
+/// отправкой в Sentry (при ошибке)
 abstract class LogUtil {
   LogUtil._();
 

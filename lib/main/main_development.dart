@@ -13,7 +13,6 @@ import 'package:weather/runner/none_runner.dart'
 import 'package:weather/src/common/utils/log_util.dart';
 import 'package:weather/src/common/utils/sentry_util.dart';
 
-/// Entry point
 void main() => l.capture<void>(
       () => SentryUtil.wrap(_appRunner),
       const LogOptions(

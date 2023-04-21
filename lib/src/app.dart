@@ -66,7 +66,7 @@ class App extends StatelessWidget {
             initBloc.close();
 
             binding.addPostFrameCallback((_) {
-              // Closes splash screen, and show the app layout.
+              ///Закрывает заставку и показывает макет приложения.
               binding.allowFirstFrame();
 
               final context = binding.renderViewElement;
