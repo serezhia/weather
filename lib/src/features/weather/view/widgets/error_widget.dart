@@ -17,30 +17,12 @@ class ErrorWeatherWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String getTranslatedError(int code) {
-      switch (code) {
-        case 0:
-          return context.l10n.error0;
-
-        case 4001:
-          return context.l10n.error4001;
-        case 4002:
-          return context.l10n.error4002;
-        case 999:
-          return context.l10n.error999;
-        case 9999:
-          return context.l10n.error9999;
-        default:
-          return context.l10n.errorUnimplemented;
-      }
-    }
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            getTranslatedError(code),
+            getTranslatedError(code, context),
             style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
@@ -55,5 +37,22 @@ class ErrorWeatherWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+String getTranslatedError(int code, BuildContext context) {
+  switch (code) {
+    case 0:
+      return context.l10n.error0;
+    case 4001:
+      return context.l10n.error4001;
+    case 4002:
+      return context.l10n.error4002;
+    case 999:
+      return context.l10n.error999;
+    case 9999:
+      return context.l10n.error9999;
+    default:
+      return context.l10n.errorUnimplemented;
   }
 }

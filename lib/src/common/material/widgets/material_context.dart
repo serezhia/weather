@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:weather/src/common/router/router.dart';
+import 'package:weather/src/common/theme/dark_theme.dart';
 import 'package:weather/src/common/theme/light_theme.dart';
 import 'package:weather/src/features/l10n/l10n.dart';
 
@@ -21,6 +22,7 @@ class _AppMaterialContextState extends State<AppMaterialContext> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       theme: lightTheme,
+      darkTheme: darkTheme,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

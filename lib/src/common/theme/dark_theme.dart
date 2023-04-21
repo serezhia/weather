@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 
-final lightTheme = ThemeData(
-  scaffoldBackgroundColor: Colors.white,
-  colorScheme: const ColorScheme.light(
-    primary: Colors.white,
-    secondary: Colors.black,
+final darkTheme = ThemeData(
+  iconTheme: const IconThemeData(color: Colors.white),
+  colorScheme: const ColorScheme.dark(
+    primary: Colors.black,
+    secondary: Colors.white,
   ),
+  scaffoldBackgroundColor: Colors.black,
   appBarTheme: const AppBarTheme(
     centerTitle: true,
-    iconTheme: IconThemeData(color: Colors.black),
+    iconTheme: IconThemeData(color: Colors.white),
     elevation: 0,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.black,
     titleTextStyle: TextStyle(
       fontFamily: 'Gilroy',
       fontSize: 30,
       fontWeight: FontWeight.w700,
-      color: Colors.black,
+      color: Colors.white,
     ),
   ),
   textSelectionTheme: TextSelectionThemeData(
-    cursorColor: Colors.black,
-    selectionColor: Colors.black.withOpacity(0.2),
-    selectionHandleColor: Colors.black,
+    cursorColor: Colors.white,
+    selectionColor: Colors.white.withOpacity(0.2),
+    selectionHandleColor: Colors.white,
   ),
   fontFamily: 'Gilroy',
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.resolveWith((states) {
         if (states.contains(MaterialState.disabled)) {
-          return Colors.grey.withOpacity(0.3);
+          return Colors.grey;
         } else {
-          return Colors.black;
+          return Colors.white;
         }
       }),
       elevation: MaterialStateProperty.all(0),

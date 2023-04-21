@@ -30,7 +30,7 @@ class _ChooseCityScreenState extends State<ChooseCityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(context.l10n.appName),
       ),
@@ -46,7 +46,11 @@ class _ChooseCityScreenState extends State<ChooseCityScreen> {
                   listener: (context, state) {
                     if (state.codeError != null) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.codeError.toString())),
+                        SnackBar(
+                          content: Text(
+                            getTranslatedError(state.codeError!, context),
+                          ),
+                        ),
                       );
                     }
                   },
@@ -72,6 +76,9 @@ class _ChooseCityScreenState extends State<ChooseCityScreen> {
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
                                     border: Border.all(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                       width: 2,
                                       strokeAlign:
                                           BorderSide.strokeAlignOutside,
@@ -87,17 +94,24 @@ class _ChooseCityScreenState extends State<ChooseCityScreen> {
                                           fontWeight: FontWeight.w500,
                                         ),
                                         autofocus: true,
-                                        decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.symmetric(
+                                        decoration: InputDecoration(
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
                                             horizontal: 10,
                                           ),
                                           enabledBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               width: 2,
                                             ),
                                           ),
                                           focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary,
                                               width: 2,
                                             ),
                                           ),

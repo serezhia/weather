@@ -46,7 +46,7 @@ class _DaysWeatherScreenState extends State<DaysWeatherScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         leading: BackButton(
           onPressed: () {
@@ -186,20 +186,21 @@ class _WeatherDaysItem extends StatelessWidget {
           SizedBox(
             height: 80,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  DateFormat.Hm(context.l10n.localeName)
-                      .format(weather.date.toLocal()),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
+                SizedBox(
+                  width: 60,
+                  child: Text(
+                    DateFormat.Hm(context.l10n.localeName)
+                        .format(weather.date.toLocal()),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 10),
                 Expanded(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
                         height: 50,
@@ -217,7 +218,6 @@ class _WeatherDaysItem extends StatelessWidget {
                 ),
                 Expanded(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(
                         height: 50,
@@ -238,7 +238,6 @@ class _WeatherDaysItem extends StatelessWidget {
                 ),
                 Expanded(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(
                         height: 50,
