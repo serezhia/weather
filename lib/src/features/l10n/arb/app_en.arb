@@ -45,6 +45,11 @@
   
     "error9999": "Unknown internet error",
    
-    "errorUnimplemented": "Unknown error"
+    "errorUnimplemented": "Unknown error",
+    
+    "retryButton": "Retry",
+    "@retryButton": {
+        "description": "Text on retry button"
+    }
 
 }

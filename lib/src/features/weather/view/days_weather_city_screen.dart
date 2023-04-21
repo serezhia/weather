@@ -59,6 +59,8 @@ class _DaysWeatherScreenState extends State<DaysWeatherScreen> {
             }
           },
         ),
+
+        /// Динамический заголовок в зависимости от состояния загрузки
         title: BlocBuilder<DaysWeatherBloc, DaysWeatherState>(
           bloc: bloc,
           builder: (context, state) {
@@ -109,6 +111,8 @@ class _DaysWeatherScreenState extends State<DaysWeatherScreen> {
                   itemCount: state.coldWeather != null
                       ? state.weathers.length + 1
                       : state.weathers.length,
+
+                  /// Условия появления заголовка/даты у итема
                   itemBuilder: (context, index) {
                     if (state.coldWeather != null) {
                       if (index == 0) {

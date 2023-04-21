@@ -48,8 +48,8 @@ class ErrorWeatherWidget extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: onPressed,
-            child: const Text(
-              'Повторить',
+            child: Text(
+              context.l10n.retryButton,
             ),
           )
         ],
