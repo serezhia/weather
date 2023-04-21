@@ -210,7 +210,9 @@ class CityItemWidget extends StatelessWidget {
           .read<ChooseCityBloc>()
           .add(ChooseCityBlocEvent.pickCity(city)),
       child: Container(
-        color: isPicked ? Colors.black.withOpacity(0.1) : null,
+        color: isPicked
+            ? Theme.of(context).colorScheme.secondary.withOpacity(0.1)
+            : null,
         height: 45,
         padding: const EdgeInsets.all(8),
         child: Align(
